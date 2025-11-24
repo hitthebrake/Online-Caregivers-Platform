@@ -45,6 +45,7 @@ def create_member(member_data: schemas.MemberRegister, db: Session = Depends(get
     db.refresh(db_member)
 
     address_data = {
+        'member_user_id': db_member.member_user_id,
         'house_number': member_data.house_number,
         'street': member_data.street,
         'town': member_data.town,
@@ -122,9 +123,6 @@ def set_address(address_data: schemas.Address, db: Session = Depends(get_db), cu
     db.commit()
     db.refresh(address)
     return address
-
-
-
 
 
 @router.get("", response_model=List[schemas.Member])
