@@ -11,11 +11,31 @@ from . import schemas, auth
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Caregiver Platform API", version="1.0.0")
+# app = FastAPI(title="Caregiver Platform API", version="1.0.0")
+#
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+app = FastAPI(title="Caregiver Platform API")
+
+# CORS configuration
+origins = [
+    "http://localhost:3000",
+    "http://localhost:8080",
+]
+
+# Add your frontend domain when deployed
+# if os.getenv("RENDER"):
+#     origins.append("https://your-frontend-domain.render.com")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
