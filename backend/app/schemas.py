@@ -75,6 +75,9 @@ class Caregiver(CaregiverBase):
     class Config:
         from_attributes = True
 
+class CaregiverUpdate(CaregiverBase):
+    caregiver_user_id: int
+
 
 class MemberBase(BaseModel):
     house_rules: Optional[str] = None

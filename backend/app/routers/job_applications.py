@@ -9,7 +9,7 @@ from ..auth import get_current_user, get_current_member, get_current_caregiver
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/job_application", tags=["job_application"])
+router = APIRouter(prefix="/job_applications", tags=["job_applications"])
 
 
 @router.post("", response_model=schemas.JobApplicationBase)

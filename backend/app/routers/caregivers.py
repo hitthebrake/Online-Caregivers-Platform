@@ -63,3 +63,22 @@ def read_caregivers(db: Session = Depends(get_db)):
     for caregiver in caregivers:
         caregiver.user.user_type = "caregiver"
     return caregivers
+
+@router.get("/my_caregiver_data", response_model=schemas.CaregiverBase)
+def get_caregiver(db: Session = Depends(get_db), current_user = Depends(auth.get_current_caregiver)):
+    return current_user
+
+
+@router.put("/my_caregiver_data", response_model=schemas.CaregiverUpdate)
+def update_caregiver(caregiver_data: schemas.CaregiverUpdate, db: Session = Depends(get_db), current_user = Depends(auth.get_current_caregiver)):
+    if caregiver_data.caregiver_user_id != current_user.caregiver_user_id:
+        raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail="Not allowed")
+
+    caregiver = db.query(models.Caregiver).filter(models.Caregiver.caregiver_user_id == caregiver_data.caregiver_user_id).first()
+    update_data = caregiver_data.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(caregiver, key, value)
+
+    db.commit()
+    db.refresh(caregiver)
+    return caregiver
