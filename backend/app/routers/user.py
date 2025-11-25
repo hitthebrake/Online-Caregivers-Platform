@@ -52,11 +52,11 @@ def get_job_applications(db: Session = Depends(get_db), current_user = Depends(a
 
     job_ids = [job.job_id for job in member_jobs]
 
-    applications = db.query(models.JobApplication).filter(
-        models.JobApplication.job_id.in_(job_ids)
+    applications = db.query(models.JOB_APPLICATION).filter(
+        models.JOB_APPLICATION.job_id.in_(job_ids)
     ).options(
-        joinedload(models.JobApplication.job),
-        joinedload(models.JobApplication.caregiver).joinedload(models.CAREGIVER.user)
+        joinedload(models.JOB_APPLICATION.job),
+        joinedload(models.JOB_APPLICATION.caregiver).joinedload(models.CAREGIVER.user)
     ).all()
 
     return [
@@ -86,8 +86,8 @@ def get_job_applications(db: Session = Depends(get_db), current_user = Depends(a
 
 @router.get("/my_applications", response_model=List[schemas.JobApplicationOut])
 def get_my_applications(db: Session = Depends(get_db), current_user = Depends(auth.get_current_caregiver)):
-    app = db.query(models.JobApplication).filter(
-        models.JobApplication.caregiver_user_id == current_user.caregiver_user_id
+    app = db.query(models.JOB_APPLICATION).filter(
+        models.JOB_APPLICATION.caregiver_user_id == current_user.caregiver_user_id
     )
     return app
 
