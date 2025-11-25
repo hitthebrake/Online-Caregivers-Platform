@@ -214,38 +214,133 @@ onMounted(() => {
 
 <style scoped>
 .appointments-page {
-  max-width: 1000px;
-  margin: 20px auto;
-  padding: 12px;
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 24px;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.12);
+}
+
+.appointments-page h1 {
+  margin-bottom: 18px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.appointments-page p {
+  margin: 6px 0;
+  color: #475569;
 }
 
 .appt-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
+  margin-top: 18px;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
 }
+
+.appt-table thead {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  color: #e5ecff;
+}
+
 .appt-table th,
 .appt-table td {
-  border: 1px solid #eee;
-  padding: 8px;
-  text-align: left;
-  vertical-align: top;
+  padding: 10px 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
 }
+
 .appt-table th {
-  background: #f6f6f6;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
 }
 
-select {
-  margin-top: 6px;
-  padding: 6px;
+.appt-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
 }
 
-button {
-  padding: 6px 10px;
+.appt-table tbody tr:hover {
+  background-color: #eff6ff;
+}
+
+.appointments-page select,
+.appointments-page input {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #d4d4d8;
+  background-color: #f9fafb;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.appointments-page select:focus,
+.appointments-page input:focus {
+  border-color: #2563eb;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.16);
+}
+
+.appointments-page button {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #2563eb;
+  color: #ffffff;
   cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.12s ease, transform 0.07s ease, box-shadow 0.12s ease,
+    opacity 0.15s ease;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.appointments-page button:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.appointments-page button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.35);
+}
+
+.appointments-page button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .error {
-  color: red;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .appointments-page {
+    margin: 20px 12px;
+    padding: 16px;
+  }
+
+  .appt-table {
+    display: block;
+    overflow-x: auto;
+    box-shadow: none;
+  }
 }
 </style>
+

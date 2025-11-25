@@ -77,7 +77,122 @@ async function submit() {
 </script>
 
 <style scoped>
-.page { max-width: 720px; margin: 20px auto; padding: 16px; }
-input, textarea { display:block; width:100%; margin-bottom:8px; padding:8px; }
-button{ padding:8px 14px; }
+.signup-page {
+  max-width: 520px;
+  margin: 40px auto;
+  padding: 28px 24px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.16);
+}
+
+.signup-page h1 {
+  margin-bottom: 16px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: center;
+}
+
+.signup-page h2 {
+  margin: 10px 0 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.signup-page form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.signup-page label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 3px;
+}
+
+.signup-page input,
+.signup-page select,
+.signup-page textarea {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid #d4d4d8;
+  background-color: #f9fafb;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 40px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.signup-page input:focus,
+.signup-page select:focus,
+.signup-page textarea:focus {
+  border-color: #2563eb;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.16);
+}
+
+.signup-page button[type="submit"] {
+  margin-top: 6px;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.12s ease, transform 0.07s ease, box-shadow 0.12s ease,
+    opacity 0.15s ease;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.4);
+}
+
+.signup-page button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.signup-page button[type="submit"]:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 9px 20px rgba(37, 99, 235, 0.35);
+}
+
+.signup-page button[type="submit"]:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.signup-page p {
+  margin-top: 10px;
+  font-size: 13px;
+  text-align: center;
+  color: #4b5563;
+}
+
+.signup-page a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.signup-page a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .signup-page {
+    margin: 24px 12px;
+    padding: 22px 18px;
+  }
+}
 </style>
+
