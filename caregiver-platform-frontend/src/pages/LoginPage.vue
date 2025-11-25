@@ -72,8 +72,96 @@ async function submit() {
 </script>
 
 <style scoped>
-/* minimal styles - replace with your UI framework */
-.page { max-width: 420px; margin: 40px auto; padding: 20px; }
-form > div { margin-bottom: 12px; }
-button { padding: 8px 16px; }
+.page.login-page {
+  max-width: 420px;
+  margin: 72px auto;
+  padding: 32px 28px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.15);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.login-page h1 {
+  margin-bottom: 20px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: center;
+}
+
+.login-page form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-page form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-page label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.login-page input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.login-page input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.18);
+  background-color: #ffffff;
+}
+
+.login-page button[type="submit"] {
+  margin-top: 4px;
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.15s ease;
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.35);
+}
+
+.login-page button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.45);
+}
+
+.login-page button[type="submit"]:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+}
+
+.login-page button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@media (max-width: 600px) {
+  .page.login-page {
+    margin: 40px 16px;
+    padding: 24px 20px;
+  }
+}
 </style>
+

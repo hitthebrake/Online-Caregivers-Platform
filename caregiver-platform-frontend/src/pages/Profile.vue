@@ -49,6 +49,43 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-/* minimal styles */
-.profile-redirect { max-width: 800px; margin: 20px auto; padding: 12px; }
+.profile-redirect {
+  max-width: 880px;
+  margin: 32px auto;
+  padding: 24px 22px;
+  border-radius: 20px;
+  background: radial-gradient(circle at top left, #e0f2fe, #f9fafb);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  box-shadow: 0 26px 70px rgba(15, 23, 42, 0.14);
+}
+
+.profile-redirect h2 {
+  margin-bottom: 18px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.profile-redirect p {
+  margin: 4px 0;
+  color: #4b5563;
+}
+
+.profile-redirect a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.profile-redirect a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .profile-redirect {
+    margin: 20px 12px;
+    padding: 18px 16px;
+  }
+}
 </style>
+

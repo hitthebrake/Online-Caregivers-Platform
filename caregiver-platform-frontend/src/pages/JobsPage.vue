@@ -246,17 +246,198 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.jobs-page { max-width: 900px; margin: 20px auto; padding: 12px; }
-.create-job { background: #fafafa; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
-.form-row { margin-bottom: 10px; }
-textarea, select, input { width: 100%; padding: 8px; box-sizing: border-box; }
-.jobs-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-.jobs-table th, .jobs-table td { border: 1px solid #eee; padding: 8px; text-align: left; }
-.jobs-table th { background: #f3f3f3; }
-button { padding: 6px 10px; margin-right: 6px; cursor: pointer; }
-.error { color: red; }
+.jobs-page {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 24px;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.12);
+}
+
+.jobs-page h1 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.jobs-page h2 {
+  margin: 20px 0 12px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.create-job {
+  background: #ffffff;
+  padding: 18px 16px;
+  border-radius: 14px;
+  box-shadow: 0 12px 26px rgba(148, 163, 184, 0.28);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.form-row label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.jobs-page textarea,
+.jobs-page select,
+.jobs-page input {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid #d4d4d8;
+  background-color: #f9fafb;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 40px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.jobs-page textarea:focus,
+.jobs-page select:focus,
+.jobs-page input:focus {
+  border-color: #2563eb;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.16);
+}
+
+.jobs-page button {
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.12s ease, transform 0.07s ease, box-shadow 0.12s ease,
+    opacity 0.15s ease;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.jobs-page button:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.jobs-page button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.35);
+}
+
+.jobs-page button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.jobs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+}
+
+.jobs-table thead {
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  color: #ecfeff;
+}
+
+.jobs-table th,
+.jobs-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+.jobs-table th {
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.jobs-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.jobs-table tbody tr:hover {
+  background-color: #ecfeff;
+}
+
+.error {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  font-size: 13px;
+}
 
 /* modal */
-.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; }
-.modal { background: white; padding: 16px; border-radius: 8px; max-width: 520px; width: 90%; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+}
+
+.modal {
+  background: #ffffff;
+  padding: 20px 18px;
+  border-radius: 18px;
+  max-width: 520px;
+  width: 92%;
+  box-shadow: 0 26px 70px rgba(15, 23, 42, 0.45);
+}
+
+.modal h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.modal p {
+  margin: 4px 0;
+  color: #374151;
+}
+
+.modal button {
+  margin-top: 14px;
+}
+
+@media (max-width: 768px) {
+  .jobs-page {
+    margin: 20px 12px;
+    padding: 16px;
+  }
+
+  .jobs-table {
+    display: block;
+    overflow-x: auto;
+    box-shadow: none;
+  }
+}
 </style>
+
