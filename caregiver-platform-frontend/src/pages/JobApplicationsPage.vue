@@ -230,7 +230,7 @@ onMounted(() => {
         <label>Status</label>
         <select v-model="appointmentForm.status">
           <option value="pending">pending</option>
-          <option value="confirmed">confirmed</option>
+          <option value="accepted">accepted</option>
           <option value="cancelled">cancelled</option>
         </select>
 

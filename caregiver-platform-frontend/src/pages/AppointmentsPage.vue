@@ -14,7 +14,7 @@ type Appointment = {
   appointment_date: string;   // e.g. "2025-11-25"
   appointment_time: string;   // e.g. "03:45:21.507Z" or "03:45:21"
   work_hours: number;
-  status: "pending" | "confirmed" | "declined" | string;
+  status: "pending" | "accepted" | "declined" | string;
   appointment_id: number;
   caregiver_user_id: number;
   caregiver_name?: string;
@@ -173,7 +173,7 @@ onMounted(() => {
             <!-- control to pick new status -->
             <select v-model="statusSelections[a.appointment_id]">
               <option value="pending">pending</option>
-              <option value="confirmed">confirmed</option>
+              <option value="accepted">accepted</option>
               <option value="declined">declined</option>
             </select>
           </td>
