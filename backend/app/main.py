@@ -81,7 +81,7 @@ async def login_for_access_token(login_data: schemas.UserLogin, db: Session = De
     )
 
 
-@app.get("/health")
+@app.get("")
 async def health_check():
     return {"status": "ok"}
 
