@@ -96,32 +96,40 @@ def get_my_applications(db: Session = Depends(get_db), current_user = Depends(au
 def read_caregiver_appointments(db: Session = Depends(get_db), current_user = Depends(auth.get_current_caregiver)):
     appointments = db.query(models.Appointment) \
         .filter(models.Appointment.caregiver_user_id == current_user.caregiver_user_id) \
-        .options(joinedload(models.Appointment.member).joinedload(models.Member.user).joinedload(models.Member.addresses))
-    context = [{
-        "appointment_id": appointment.appointment_id,
-        "appointment_date": appointment.appointment_date,
-        "appointment_time": appointment.appointment_time,
-        "work_hours": appointment.work_hours,
-        "status": appointment.status,
+        .options(
+        joinedload(models.Appointment.member).joinedload(models.Member.user),
+        joinedload(models.Appointment.member).joinedload(models.Member.addresses)
+    )
+    context = []
+    for appointment in appointments:
+        address = appointment.member.addresses[0] if appointment.member.addresses else None
 
-        "caregiver_user_id": current_user.caregiver_user_id,
-        "caregiver_name": current_user.user.given_name,
-        "caregiver_surname": current_user.user.surname,
-        "caregiver_phone_number": current_user.user.phone_number,
-        "caregiver_email": current_user.user.email,
+        context.append({
+            "appointment_id": appointment.appointment_id,
+            "appointment_date": appointment.appointment_date,
+            "appointment_time": appointment.appointment_time,
+            "work_hours": appointment.work_hours,
+            "status": appointment.status,
 
-        "member_user_id": appointment.member_user_id,
-        "member_name": appointment.member.user.given_name,
-        "member_surname": appointment.member.user.given_name,
-        "member_phone_number": appointment.member.user.given_name,
-        "member_email": appointment.member.user.given_name,
+            "caregiver_user_id": current_user.caregiver_user_id,
+            "caregiver_name": current_user.user.given_name,
+            "caregiver_surname": current_user.user.surname,
+            "caregiver_phone_number": current_user.user.phone_number,
+            "caregiver_email": current_user.user.email,
 
-        "member_address": {
-            "house_number": appointment.member.addresses.house_number or "",
-            "street": appointment.member.addresses.street or "",
-            "town": appointment.member.addresses.town or "",
-        }
-    } for appointment in appointments]
+            "member_user_id": appointment.member_user_id,
+            "member_name": appointment.member.user.given_name,
+            "member_surname": appointment.member.user.surname,
+            "member_phone_number": appointment.member.user.phone_number,
+            "member_email": appointment.member.user.email,
+
+            "member_address": {
+                "house_number": address.house_number if address else "",
+                "street": address.street if address else "",
+                "town": address.town if address else "",
+            }
+        })
+
     return context
 
 
