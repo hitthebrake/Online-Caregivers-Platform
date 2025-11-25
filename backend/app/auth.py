@@ -67,23 +67,23 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     except JWTError:
         raise credentials_exception
 
-    user = db.query(models.User).filter(models.User.email == token_data.email).first()
+    user = db.query(models.USER).filter(models.USER.email == token_data.email).first()
     if user is None:
         raise credentials_exception
     return user
 
-async def get_current_caregiver(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
-    caregiver = db.query(models.Caregiver) \
-        .filter(models.Caregiver.caregiver_user_id == current_user.user_id) \
-        .options(joinedload(models.Caregiver.user)).first()
+async def get_current_caregiver(current_user: models.USER = Depends(get_current_user), db: Session = Depends(get_db)):
+    caregiver = db.query(models.CAREGIVER) \
+        .filter(models.CAREGIVER.caregiver_user_id == current_user.user_id) \
+        .options(joinedload(models.CAREGIVER.user)).first()
     if not caregiver:
         raise HTTPException(status_code=403, detail="Not a caregiver")
     return caregiver
 
-async def get_current_member(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
-    member = db.query(models.Member) \
-        .filter(models.Member.member_user_id == current_user.user_id) \
-        .options(joinedload(models.Member.user)).first()
+async def get_current_member(current_user: models.USER = Depends(get_current_user), db: Session = Depends(get_db)):
+    member = db.query(models.MEMBER) \
+        .filter(models.MEMBER.member_user_id == current_user.user_id) \
+        .options(joinedload(models.MEMBER.user)).first()
     if not member:
         raise HTTPException(status_code=403, detail="Not a member")
     return member

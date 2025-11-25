@@ -57,7 +57,7 @@ async def health_check():
 
 @app.post("/token", response_model=schemas.Token)
 async def login_for_access_token(login_data: schemas.UserLogin, db: Session = Depends(get_db)):
-    cur_user = db.query(models.User).filter(models.User.email == login_data.email).first()
+    cur_user = db.query(models.USER).filter(models.USER.email == login_data.email).first()
 
     if not cur_user or not auth.verify_password(login_data.password, cur_user.password):
         raise HTTPException(
@@ -67,8 +67,8 @@ async def login_for_access_token(login_data: schemas.UserLogin, db: Session = De
         )
 
     # Determine user type
-    caregiver = db.query(models.Caregiver).filter(models.Caregiver.caregiver_user_id == cur_user.user_id).first()
-    member = db.query(models.Member).filter(models.Member.member_user_id == cur_user.user_id).first()
+    caregiver = db.query(models.CAREGIVER).filter(models.CAREGIVER.caregiver_user_id == cur_user.user_id).first()
+    member = db.query(models.MEMBER).filter(models.MEMBER.member_user_id == cur_user.user_id).first()
 
     user_type = "caregiver" if caregiver else "member" if member else "unknown"
 

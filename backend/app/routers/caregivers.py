@@ -13,7 +13,7 @@ router = APIRouter(prefix="/caregivers", tags=["caregivers"])
 
 @router.post("", response_model=schemas.UserProfile)
 def create_caregiver(caregiver_data: schemas.CaregiverRegister, db: Session = Depends(get_db)):
-    existing_user = db.query(models.User).filter(models.User.email == caregiver_data.email).first()
+    existing_user = db.query(models.USER).filter(models.USER.email == caregiver_data.email).first()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -29,7 +29,7 @@ def create_caregiver(caregiver_data: schemas.CaregiverRegister, db: Session = De
         'profile_description': caregiver_data.profile_description,
         'password': auth.get_password_hash(caregiver_data.password)
     }
-    db_user = models.User(**user_data)
+    db_user = models.USER(**user_data)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -38,10 +38,10 @@ def create_caregiver(caregiver_data: schemas.CaregiverRegister, db: Session = De
         'caregiver_user_id': db_user.user_id,
         'photo': caregiver_data.photo,
         'gender': caregiver_data.gender,
-        'caregiving_type': caregiver_data.caregiving_type.value if caregiver_data.caregiving_type else None,
+        'caregiving_type': caregiver_data.caregiving_type if caregiver_data.caregiving_type else None,
         'hourly_rate': caregiver_data.hourly_rate
     }
-    db_caregiver = models.Caregiver(**caregiver_profile_data)
+    db_caregiver = models.CAREGIVER(**caregiver_profile_data)
     db.add(db_caregiver)
     db.commit()
 
@@ -59,7 +59,7 @@ def create_caregiver(caregiver_data: schemas.CaregiverRegister, db: Session = De
 
 @router.get("", response_model=List[schemas.Caregiver])
 def read_caregivers(db: Session = Depends(get_db)):
-    caregivers = (db.query(models.Caregiver).options(joinedload(models.Caregiver.user)).all())
+    caregivers = (db.query(models.CAREGIVER).options(joinedload(models.CAREGIVER.user)).all())
     for caregiver in caregivers:
         caregiver.user.user_type = "caregiver"
     return caregivers
@@ -74,7 +74,7 @@ def update_caregiver(caregiver_data: schemas.CaregiverUpdate, db: Session = Depe
     if caregiver_data.caregiver_user_id != current_user.caregiver_user_id:
         raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail="Not allowed")
 
-    caregiver = db.query(models.Caregiver).filter(models.Caregiver.caregiver_user_id == caregiver_data.caregiver_user_id).first()
+    caregiver = db.query(models.CAREGIVER).filter(models.CAREGIVER.caregiver_user_id == caregiver_data.caregiver_user_id).first()
     update_data = caregiver_data.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(caregiver, key, value)

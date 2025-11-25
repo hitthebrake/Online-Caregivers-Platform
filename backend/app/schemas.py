@@ -1,18 +1,6 @@
 from pydantic import BaseModel, field_validator
 from typing import Optional, List
 from datetime import date, time
-from enum import Enum
-
-
-class CaregivingType(str, Enum):
-    BABYSITTER = "babysitter"
-    ELDERLY_CARE = "caregiver for elderly"
-    PLAYMATE = "playmate for children"
-
-class AppointmentStatus(str, Enum):
-    PENDING = "pending"
-    CONFIRMED = "confirmed"
-    DECLINED = "declined"
 
 
 class UserBase(BaseModel):
@@ -32,6 +20,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+
 
     @field_validator('password')
     def validate_password(cls, v):
@@ -64,7 +53,7 @@ class UserProfile(BaseModel):
 class CaregiverBase(BaseModel):
     photo: Optional[str] = None
     gender: Optional[str] = None
-    caregiving_type: Optional[CaregivingType] = None
+    caregiving_type: Optional[str] = None
     hourly_rate: Optional[float] = None
 
 
@@ -113,7 +102,7 @@ class Address(AddressBase):
 
 
 class JobBase(BaseModel):
-    required_caregiving_type: Optional[CaregivingType] = None
+    required_caregiving_type: Optional[str] = None
     other_requirements: Optional[str] = None
 
 
@@ -169,7 +158,7 @@ class AppointmentBase(BaseModel):
     appointment_date: Optional[date] = None
     appointment_time: Optional[time] = None
     work_hours: Optional[int] = None
-    status: Optional[AppointmentStatus] = None
+    status: Optional[str] = None
 
 
 class AppointmentCreate(AppointmentBase):
@@ -218,7 +207,7 @@ class CaregiverRegister(BaseModel):
     password: str
     photo: Optional[str] = None
     gender: Optional[str] = None
-    caregiving_type: Optional[CaregivingType] = None
+    caregiving_type: Optional[str] = None
     hourly_rate: Optional[float] = None
 
 

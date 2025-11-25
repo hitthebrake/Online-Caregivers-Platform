@@ -12,14 +12,14 @@ router = APIRouter(prefix="/user", tags=["user"])
 
 @router.get("/me", response_model=schemas.UserProfile)
 async def get_current_user_profile(
-        db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)
+        db: Session = Depends(get_db), current_user: models.USER = Depends(auth.get_current_user)
 ):
     # Determine user type
-    caregiver = db.query(models.Caregiver).filter(
-        models.Caregiver.caregiver_user_id == current_user.user_id
+    caregiver = db.query(models.CAREGIVER).filter(
+        models.CAREGIVER.caregiver_user_id == current_user.user_id
     ).first()
-    member = db.query(models.Member).filter(
-        models.Member.member_user_id == current_user.user_id
+    member = db.query(models.MEMBER).filter(
+        models.MEMBER.member_user_id == current_user.user_id
     ).first()
 
     user_type = "caregiver" if caregiver else "member" if member else "unknown"
@@ -37,14 +37,14 @@ async def get_current_user_profile(
 
 @router.get("/jobs", response_model=List[schemas.Job])
 def get_my_jobs(db: Session = Depends(get_db), current_user = Depends(auth.get_current_member)):
-    jobs = db.query(models.Job).filter(models.Job.member_user_id == current_user.member_user_id)
+    jobs = db.query(models.JOB).filter(models.JOB.member_user_id == current_user.member_user_id)
     return jobs
 
 
 @router.get("/job_applications", response_model=List[schemas.ApplicationsForJobOut])
 def get_job_applications(db: Session = Depends(get_db), current_user = Depends(auth.get_current_member)):
-    member_jobs = db.query(models.Job).filter(
-        models.Job.member_user_id == current_user.member_user_id
+    member_jobs = db.query(models.JOB).filter(
+        models.JOB.member_user_id == current_user.member_user_id
     ).all()
 
     if not member_jobs:
@@ -56,7 +56,7 @@ def get_job_applications(db: Session = Depends(get_db), current_user = Depends(a
         models.JobApplication.job_id.in_(job_ids)
     ).options(
         joinedload(models.JobApplication.job),
-        joinedload(models.JobApplication.caregiver).joinedload(models.Caregiver.user)
+        joinedload(models.JobApplication.caregiver).joinedload(models.CAREGIVER.user)
     ).all()
 
     return [
@@ -94,11 +94,11 @@ def get_my_applications(db: Session = Depends(get_db), current_user = Depends(au
 
 @router.get("/caregiver_appointments", response_model=List[schemas.AppointmentOut])
 def read_caregiver_appointments(db: Session = Depends(get_db), current_user = Depends(auth.get_current_caregiver)):
-    appointments = db.query(models.Appointment) \
-        .filter(models.Appointment.caregiver_user_id == current_user.caregiver_user_id) \
+    appointments = db.query(models.APPOINTMENT) \
+        .filter(models.APPOINTMENT.caregiver_user_id == current_user.caregiver_user_id) \
         .options(
-        joinedload(models.Appointment.member).joinedload(models.Member.user),
-        joinedload(models.Appointment.member).joinedload(models.Member.addresses)
+        joinedload(models.APPOINTMENT.member).joinedload(models.MEMBER.user),
+        joinedload(models.APPOINTMENT.member).joinedload(models.MEMBER.addresses)
     )
     context = []
     for appointment in appointments:
@@ -135,10 +135,10 @@ def read_caregiver_appointments(db: Session = Depends(get_db), current_user = De
 
 @router.get("/member_appointments", response_model=List[schemas.AppointmentOut])
 def read_member_appointments(db: Session = Depends(get_db), current_user = Depends(auth.get_current_member)):
-    address = db.query(models.Address).filter(models.Address.member_user_id == current_user.member_user_id).first()
-    appointments = db.query(models.Appointment) \
-                    .filter(models.Appointment.member_user_id == current_user.member_user_id) \
-                    .options(joinedload(models.Appointment.caregiver).joinedload(models.Caregiver.user))
+    address = db.query(models.ADDRESS).filter(models.ADDRESS.member_user_id == current_user.member_user_id).first()
+    appointments = db.query(models.APPOINTMENT) \
+                    .filter(models.APPOINTMENT.member_user_id == current_user.member_user_id) \
+                    .options(joinedload(models.APPOINTMENT.caregiver).joinedload(models.CAREGIVER.user))
     return [{
         "appointment_id": appointment.appointment_id,
         "appointment_date": appointment.appointment_date,

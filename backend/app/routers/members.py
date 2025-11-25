@@ -13,7 +13,7 @@ router = APIRouter(prefix="/members", tags=["members"])
 
 @router.post("", response_model=schemas.UserProfile)
 def create_member(member_data: schemas.MemberRegister, db: Session = Depends(get_db)):
-    existing_user = db.query(models.User).filter(models.User.email == member_data.email).first()
+    existing_user = db.query(models.USER).filter(models.USER.email == member_data.email).first()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -29,7 +29,7 @@ def create_member(member_data: schemas.MemberRegister, db: Session = Depends(get
         'profile_description': member_data.profile_description,
         'password': auth.get_password_hash(member_data.password)
     }
-    db_user = models.User(**user_data)
+    db_user = models.USER(**user_data)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -39,7 +39,7 @@ def create_member(member_data: schemas.MemberRegister, db: Session = Depends(get
         'house_rules': member_data.house_rules,
         'dependent_description': member_data.dependent_description
     }
-    db_member = models.Member(**member_profile_data)
+    db_member = models.MEMBER(**member_profile_data)
     db.add(db_member)
     db.commit()
     db.refresh(db_member)
@@ -50,7 +50,7 @@ def create_member(member_data: schemas.MemberRegister, db: Session = Depends(get
         'street': member_data.street,
         'town': member_data.town,
     }
-    db_address = models.Address(**address_data)
+    db_address = models.ADDRESS(**address_data)
     db.add(db_address)
     db.commit()
 
@@ -77,7 +77,7 @@ def update_member(member_data: schemas.MemberUpdate, db: Session = Depends(get_d
     if member_data.member_user_id != current_user.member_user_id:
         raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail="Not allowed")
 
-    member = db.query(models.Member).filter(models.Member.member_user_id == member_data.member_user_id).first()
+    member = db.query(models.MEMBER).filter(models.MEMBER.member_user_id == member_data.member_user_id).first()
     update_data = member_data.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(member, key, value)
@@ -89,7 +89,7 @@ def update_member(member_data: schemas.MemberUpdate, db: Session = Depends(get_d
 
 @router.get("/my_address_data", response_model=schemas.AddressBase)
 def get_address(db: Session = Depends(get_db), current_user = Depends(auth.get_current_member)):
-    address = db.query(models.Address).filter(models.Address.member_user_id == current_user.member_user_id).first()
+    address = db.query(models.ADDRESS).filter(models.ADDRESS.member_user_id == current_user.member_user_id).first()
     return address or {}
 
 
@@ -98,7 +98,7 @@ def update_address(address_data: schemas.Address, db: Session = Depends(get_db),
     if address_data.member_user_id != current_user.member_user_id:
         raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail="Not allowed")
 
-    address = db.query(models.Address).filter(models.Address.member_user_id == address_data.member_user_id).first()
+    address = db.query(models.ADDRESS).filter(models.ADDRESS.member_user_id == address_data.member_user_id).first()
     if not address:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Address not found")
     update_data = address_data.model_dump(exclude_unset=True)
@@ -115,10 +115,10 @@ def set_address(address_data: schemas.Address, db: Session = Depends(get_db), cu
     if address_data.member_user_id != current_user.member_user_id:
         raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail="Not allowed")
 
-    address = db.query(models.Address).filter(models.Address.member_user_id == address_data.member_user_id).first()
+    address = db.query(models.ADDRESS).filter(models.ADDRESS.member_user_id == address_data.member_user_id).first()
     if address:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Address already exists")
-    address = models.Address(**address_data.model_dump(exclude_unset=True))
+    address = models.ADDRESS(**address_data.model_dump(exclude_unset=True))
     db.add(address)
     db.commit()
     db.refresh(address)
@@ -127,7 +127,7 @@ def set_address(address_data: schemas.Address, db: Session = Depends(get_db), cu
 
 @router.get("", response_model=List[schemas.Member])
 def read_members(db: Session = Depends(get_db)):
-    members = db.query(models.Member).options(joinedload(models.Member.user)).all()
+    members = db.query(models.MEMBER).options(joinedload(models.MEMBER.user)).all()
     for member in members:
         member.user.user_type = "member"
     return members
