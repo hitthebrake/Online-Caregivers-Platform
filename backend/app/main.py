@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from starlette.responses import JSONResponse
+
 from . import models
 from .database import get_db, engine
 from fastapi.middleware.cors import CORSMiddleware
@@ -49,6 +51,10 @@ app.include_router(user.router, tags=["user"])
 app.include_router(job_applications.router, tags=["job_applications"])
 
 
+@app.get("/")
+async def health_check():
+    return JSONResponse({"status": "ok"})
+
 @app.post("/token", response_model=schemas.Token)
 async def login_for_access_token(login_data: schemas.UserLogin, db: Session = Depends(get_db)):
     cur_user = db.query(models.User).filter(models.User.email == login_data.email).first()
@@ -79,11 +85,6 @@ async def login_for_access_token(login_data: schemas.UserLogin, db: Session = De
         user_type=user_type,
         user_id=cur_user.user_id
     )
-
-
-@app.get("")
-async def health_check():
-    return {"status": "ok"}
 
 
 if __name__ == "__main__":
