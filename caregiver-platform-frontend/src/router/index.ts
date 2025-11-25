@@ -1,26 +1,20 @@
+import { useAuthStore } from "../stores/auth.js"; // <-- ADD THIS
 import { createRouter, createWebHistory } from "vue-router";
-import LoginPage from "../pages/LoginPage.vue";
-import SignupMember from "../pages/SignupMember.vue";
-import SignupCaregiver from "../pages/SignupCaregiver.vue";
-import Profile from "../pages/Profile.vue";
-import JobsPage from "../pages/JobsPage.vue";
-import JobApplicationsPage from "../pages/JobApplicationsPage.vue";
-import AppointmentsPage from "../pages/AppointmentsPage.vue";
-import { useAuthStore } from "../stores/auth"; // <-- ADD THIS
+import type { RouteRecordRaw } from "vue-router";
 
-const routes = [
+// Use dynamic imports for better code splitting
+const routes: RouteRecordRaw[] = [
   { path: "/", redirect: "/login" },
-  { path: "/login", component: LoginPage },
-  { path: "/signup/caregiver", component: SignupCaregiver },
-  { path: "/signup/member", component: SignupMember },
-  { path: "/profile", component: Profile },
-    { path: "/jobs", component: JobsPage },
-    { path: "/job-applications", component: JobApplicationsPage },
-    { path: "/appointments", component: AppointmentsPage },
-
+  { path: "/login", component: () => import("../pages/LoginPage.vue") },
+  { path: "/signup/caregiver", component: () => import("../pages/SignupCaregiver.vue") },
+  { path: "/signup/member", component: () => import("../pages/SignupMember.vue") },
+  { path: "/profile", component: () => import("../pages/Profile.vue") },
+  { path: "/jobs", component: () => import("../pages/JobsPage.vue") },
+  { path: "/job-applications", component: () => import("../pages/JobApplicationsPage.vue") },
+  { path: "/appointments", component: () => import("../pages/AppointmentsPage.vue") },
 ];
 
-export const router = createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
 });
@@ -36,3 +30,5 @@ router.beforeEach((to, from, next) => {
 
   next();
 });
+
+export default router ;

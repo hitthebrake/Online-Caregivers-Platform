@@ -14,7 +14,7 @@ type IncomingApplication = {
   job: Job;
   caregiver_user_id: number;
   date_applied: string;
-  // caregiver profile fields:
+
   email?: string;
   given_name?: string;
   surname?: string;
@@ -42,26 +42,22 @@ const isCaregiver = computed(() => auth.user_type === "caregiver");
 const loading = ref(false);
 const error = ref<string | null>(null);
 
-// Member: incoming applications
 const incoming = ref<IncomingApplication[]>([]);
 
-// Appointment modal state (for member)
 const appointmentModalOpen = ref(false);
 const appointmentForm = ref({
-  appointment_date: "", // yyyy-mm-dd
-  appointment_time: "", // hh:mm:ss or ISO time
+  appointment_date: "",
+  appointment_time: "",
   work_hours: 1,
   status: "pending",
   caregiver_user_id: 0,
   member_user_id: auth.user_id ?? 0,
 });
 
-// Caregiver: own applications and job map
 const myApplications = ref<MyApplication[]>([]);
 const myJobs = ref<Job[]>([]);
 const jobMap = ref<Record<number, Job>>({}); // job_id -> Job
 
-// helpers
 function resetAppointmentForm() {
   appointmentForm.value = {
     appointment_date: "",
@@ -73,7 +69,6 @@ function resetAppointmentForm() {
   };
 }
 
-// Load incoming applications for member
 async function loadIncoming() {
   loading.value = true;
   error.value = null;
@@ -88,23 +83,22 @@ async function loadIncoming() {
   }
 }
 
-// Open appointment form for a particular caregiver (member)
 function openAppointmentFormFor(app: IncomingApplication) {
   resetAppointmentForm();
   appointmentForm.value.caregiver_user_id = app.caregiver_user_id;
   appointmentForm.value.member_user_id = auth.user_id ?? 0;
-  // default appointment_date to today
+
   appointmentForm.value.appointment_date = new Date().toISOString().slice(0, 10);
-  // default time to current time hh:mm:ss
+
   const now = new Date();
-  appointmentForm.value.appointment_time = now.toTimeString().split(" ")[0];
+  const timeString = now.toTimeString().split(" ")[0];
+  appointmentForm.value.appointment_time = timeString || '12:00';
   appointmentModalOpen.value = true;
 }
 
-// Submit appointment (member)
 async function submitAppointment() {
   try {
-    // minimal validation
+
     if (!appointmentForm.value.appointment_date || !appointmentForm.value.appointment_time) {
       return alert("Please provide date and time");
     }
@@ -119,7 +113,7 @@ async function submitAppointment() {
     await api.post("/appointments", payload);
     alert("Appointment created successfully");
     appointmentModalOpen.value = false;
-    // reload incoming list in case status changed server-side
+
     await loadIncoming();
   } catch (e: any) {
     console.error("submitAppointment", e);
@@ -127,7 +121,7 @@ async function submitAppointment() {
   }
 }
 
-// Caregiver: load own applications and jobs
+
 async function loadCaregiverData() {
   loading.value = true;
   error.value = null;
@@ -138,7 +132,7 @@ async function loadCaregiverData() {
     ]);
     myApplications.value = appResp.data as MyApplication[];
     myJobs.value = jobsResp.data as Job[];
-    // build job map
+
     const map: Record<number, Job> = {};
     myJobs.value.forEach((j) => (map[j.job_id] = j));
     jobMap.value = map;
@@ -150,13 +144,13 @@ async function loadCaregiverData() {
   }
 }
 
-// Caregiver: delete application
+
 async function deleteApplication(jobId: number, caregiverUserId: number) {
   if (!confirm("Delete this application?")) return;
   try {
     await api.delete(`/job_applications/${jobId}/${caregiverUserId}`);
     alert("Application deleted");
-    // refresh
+
     await loadCaregiverData();
   } catch (e: any) {
     console.error("deleteApplication", e);
@@ -164,7 +158,7 @@ async function deleteApplication(jobId: number, caregiverUserId: number) {
   }
 }
 
-// initial load
+
 onMounted(() => {
   if (isMember.value) {
     loadIncoming();
@@ -272,7 +266,7 @@ onMounted(() => {
             <td>{{ jobMap[app.job_id]?.other_requirements ?? "-" }}</td>
             <td>
               <div v-if="jobMap[app.job_id]">
-                Member ID: {{ jobMap[app.job_id].member_user_id }}
+                Member ID: {{ jobMap[app.job_id]?.member_user_id }}
               </div>
               <div v-else>—</div>
             </td>
