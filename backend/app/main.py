@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from starlette.responses import JSONResponse
 
 from . import models
@@ -51,9 +51,17 @@ app.include_router(user.router, tags=["user"])
 app.include_router(job_applications.router, tags=["job_applications"])
 
 
-@app.head("/")
-async def health_check():
-    return JSONResponse({"status": "ok"})
+@app.head("/", status_code=status.HTTP_200_OK)
+async def head_health_check(response: Response):
+    """
+    Handles HEAD requests for the health check endpoint.
+    Returns only the headers, as per HTTP HEAD method specification.
+    """
+    # FastAPI automatically handles the HEAD request for a GET endpoint,
+    # but you can explicitly define a HEAD endpoint if you need specific logic or headers.
+    # In this case, we simply ensure a 200 OK status.
+    response.headers["X-Health-Status"] = "Healthy"
+    return Response(status_code=status.HTTP_200_OK)
 
 @app.get("/")
 async def health_check():
