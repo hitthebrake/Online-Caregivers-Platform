@@ -51,6 +51,10 @@ app.include_router(user.router, tags=["user"])
 app.include_router(job_applications.router, tags=["job_applications"])
 
 
+@app.head("/")
+async def health_check():
+    return JSONResponse({"status": "ok"})
+
 @app.get("/")
 async def health_check():
     return JSONResponse({"status": "ok"})
